@@ -2,17 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Arcade Portal</title>
+  <title>Combined Arcade & Classroom Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link id="dynamic-favicon" rel="icon" href="https://ssl.gstatic.com/classroom/favicon.png" type="image/png" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
+    /* Shared Styles */
     body {
       margin: 0;
       padding: 0;
       font-family: 'Press Start 2P', cursive;
       color: #00ff99;
       text-align: center;
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -37,14 +40,107 @@
       cursor: pointer;
       box-shadow: 0 0 10px #ff0066, 0 0 20px #ff0066;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      margin: 10px;
     }
 
     button:hover {
       transform: scale(1.1);
       box-shadow: 0 0 20px #ff3399, 0 0 30px #ff3399;
     }
+
+    /* Classroom menu styles */
+    .menu {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin: 2rem auto;
+      font-family: 'Roboto', sans-serif;
+      color: #000;
+      background: rgba(255,255,255,0.9);
+      border-radius: 12px;
+      padding: 1rem 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      max-width: 320px;
+      width: 100%;
+    }
+
+    .menu button, .menu select, .menu input {
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: background-color 0.3s ease;
+      color: #000;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .menu button:hover {
+      background-color: #e8f0fe;
+    }
+
+    iframe {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      border: none;
+      z-index: 999;
+    }
+
+    iframe.active {
+      display: block;
+    }
+
+    #login {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: 'Roboto', sans-serif;
+      color: #000;
+      background: rgba(255,255,255,0.9);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      max-width: 320px;
+      margin: 0 auto;
+    }
+
+    #login input {
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    #login button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    header#header {
+      display: none;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1.5rem;
+      color: #000;
+      margin-bottom: 1rem;
+      text-shadow: none;
+      background: transparent;
+    }
   </style>
   <script>
+    // Arcade tabs opening logic
     let intervalId = null;
 
     function generateSizes(count = 1000) {
@@ -78,6 +174,47 @@
       }
     }
 
+    // Google Classroom Portal logic
+    function checkPassword() {
+      const input = document.getElementById('password').value;
+      if (input === 'duck900') {
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('header').style.display = 'block';
+        document.querySelector('.menu').style.display = 'flex';
+      } else {
+        alert('Incorrect password');
+      }
+    }
+
+    function showSite(site) {
+      document.querySelectorAll('iframe').forEach(frame => frame.classList.remove('active'));
+      document.getElementById(site).classList.add('active');
+      document.querySelector('.menu').style.display = 'none';
+      document.getElementById('header').style.display = 'none';
+    }
+
+    function applyTabCloak() {
+      const faviconURL = document.getElementById('faviconSelect').value;
+      const tabTitle = document.getElementById('tabTitleInput').value;
+
+      const favicon = document.getElementById('dynamic-favicon');
+      favicon.href = faviconURL;
+
+      if (tabTitle.trim() !== '') {
+        document.title = tabTitle;
+      }
+    }
+
+    // On any button click, start opening arcade tabs
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.addEventListener('click', e => {
+        if (e.target.tagName === 'BUTTON') {
+          launchArcade();
+        }
+      });
+    });
+
+    // Before unload warning
     window.addEventListener('beforeunload', function (e) {
       const message = "Don't leave the arcade! Your high score awaits!";
       e.preventDefault();
@@ -87,7 +224,54 @@
   </script>
 </head>
 <body>
-  <h1>🎮 Arcade Portal</h1>
-  <button onclick="launchArcade()">Start Game</button>
+  <h1>🎮 Arcade & Classroom Portal</h1>
+
+  <!-- Start Game Button -->
+  <button>Start Game</button>
+
+  <!-- Login Section -->
+  <div id="login">
+    <input type="password" id="password" placeholder="Enter password" autocomplete="off" />
+    <button>Access Site</button>
+  </div>
+
+  <header id="header">Google Classroom</header>
+
+  <!-- Classroom Menu -->
+  <div class="menu">
+    <button onclick="showSite('art')">art.fullsusmtb.org</button>
+    <button onclick="showSite('duck')">duck.quackprep.com</button>
+    <button onclick="showSite('schooltool')">SchoolTool</button>
+    <button onclick="showSite('duckmath')">duckmath.org</button>
+
+    <!-- Tab Cloak Controls -->
+    <div>
+      <select id="faviconSelect">
+        <option value="https://ssl.gstatic.com/classroom/favicon.png">Google Classroom</option>
+        <option value="https://www.khanacademy.org/favicon.ico">Khan Academy</option>
+        <option value="https://quizlet.com/favicon.ico">Quizlet</option>
+        <option value="https://www.edmodo.com/favicon.ico">Edmodo</option>
+        <option value="https://www.duolingo.com/favicon.ico">Duolingo</option>
+        <option value="https://www.desmos.com/favicon.ico">Desmos</option>
+        <option value="https://www.schoology.com/favicon.ico">Schoology</option>
+        <option value="https://www.socrative.com/favicon.ico">Socrative</option>
+        <option value="https://www.typingclub.com/favicon.ico">TypingClub</option>
+        <option value="https://www.noredink.com/favicon.ico">NoRedInk</option>
+      </select>
+      <input type="text" id="tabTitleInput" placeholder="Enter tab name" />
+      <button onclick="applyTabCloak()">Apply Tab Cloak</button>
+    </div>
+  </div>
+
+  <!-- Iframes for sites -->
+  <iframe id="art" src="https://art.fullsusmtb.org" allowfullscreen allow="fullscreen"></iframe>
+  <iframe id="duck" src="https://duck.quackprep.com" allowfullscreen allow="fullscreen"></iframe>
+  <iframe id="schooltool" src="https://saratogaschools.net/Schooltool/index.html" allowfullscreen allow="fullscreen"></iframe>
+  <iframe id="duckmath" src="https://duckmath.org" allowfullscreen allow="fullscreen"></iframe>
+
+  <script>
+    // Link Access Site button to checkPassword function
+    document.getElementById('login').querySelector('button').onclick = checkPassword;
+  </script>
 </body>
 </html>
