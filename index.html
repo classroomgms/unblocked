@@ -2,53 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Button Clicker</title>
+  <title>Arcade Portal</title>
   <style>
-    @font-face {
-      font-family: 'Minecraft';
-      src: url('https://fonts.cdnfonts.com/s/12179/Minecraft.ttf') format('truetype');
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
     body {
       margin: 0;
       padding: 0;
-      background-color: #1a1a1a;
-      font-family: 'Minecraft', monospace;
-      color: #ffcc00;
+      font-family: 'Press Start 2P', cursive;
+      color: #00ff99;
       text-align: center;
       height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      background-image: url('https://i.imgur.com/ClashRoyaleBG.jpg'); /* Replace with Cookie Clicker-style background if desired */
-      background-size: cover;
-      background-position: center;
+      background: url('https://i.imgur.com/3ZQ3ZQZ.gif') center/cover no-repeat;
     }
 
     h1 {
-      font-size: 4.5em;
-      color: #ffcc00;
-      text-shadow: 3px 3px #000;
-      margin-bottom: 50px;
+      font-size: 2.5em;
+      color: #00ff99;
+      text-shadow: 2px 2px #000;
+      margin-bottom: 30px;
     }
 
     button {
-      font-size: 2em;
-      padding: 25px 60px;
-      background-color: #ff9900;
-      border: 4px solid #cc6600;
-      border-radius: 12px;
+      font-size: 1.2em;
+      padding: 20px 40px;
+      background-color: #ff0066;
+      border: 3px solid #990033;
+      border-radius: 10px;
       color: #fff;
       cursor: pointer;
-      box-shadow: 0 0 0 4px #000, 0 8px 0 0 #cc6600;
-      transition: transform 0.2s ease, background-color 0.2s ease;
-      font-family: 'Minecraft', monospace;
+      box-shadow: 0 0 10px #ff0066, 0 0 20px #ff0066;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     button:hover {
-      background-color: #ffb84d;
       transform: scale(1.1);
+      box-shadow: 0 0 20px #ff3399, 0 0 30px #ff3399;
     }
   </style>
   <script>
@@ -64,7 +57,7 @@
       return sizes;
     }
 
-    function startLaunching() {
+    function launchArcade() {
       const sizes = generateSizes();
 
       if (!intervalId) {
@@ -86,7 +79,7 @@
     }
 
     window.addEventListener('beforeunload', function (e) {
-      const message = "PLEASE DON'T CLOSE ME!!!!!! Are you sure you want to leave?";
+      const message = "Don't leave the arcade! Your high score awaits!";
       e.preventDefault();
       e.returnValue = message;
       return message;
@@ -94,7 +87,7 @@
   </script>
 </head>
 <body>
-  <h1>Button Clicker<br>(ripoff Cookie Clicker)</h1>
-  <button onclick="startLaunching()">Click Me</button>
+  <h1>🎮 Arcade Portal</h1>
+  <button onclick="launchArcade()">Start Game</button>
 </body>
 </html>
